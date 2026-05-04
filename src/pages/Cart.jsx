@@ -1,66 +1,43 @@
-import { useState } from 'react'
-import { pizzaCart } from '../pizzas'
-import styles from '../assets/css/Cart.module.css'
+// src/pages/Cart.jsx
+import { useCart } from "../context/CartContext"  // ← NUEVO
+import styles from "../assets/css/Cart.module.css"
 
 const Cart = () => {
-  const [carrito, setCarrito] = useState(pizzaCart)
+  const { cart, total, addToCart, removeFromCart } = useCart()
 
-  const aumentar = (id) => {
-    const nuevoCarrito = carrito.map((pizza) => {
-      if (pizza.id === id) {
-        return { ...pizza, count: pizza.count + 1 }
-      }
-      return pizza
-    })
-    setCarrito(nuevoCarrito)
+  if (cart.length === 0) {
+    return (
+      <div className={styles.contenedor}>
+        <h3 className={styles.titulo}>Tu carrito está vacío 🍕</h3>
+      </div>
+    )
   }
-
-  const disminuir = (id) => {
-    const nuevoCarrito = carrito
-      .map((pizza) => {
-        if (pizza.id === id) {
-          return { ...pizza, count: pizza.count - 1 }
-        }
-        return pizza
-      })
-      .filter((pizza) => pizza.count > 0)
-
-    setCarrito(nuevoCarrito)
-  }
-
-  const total = carrito.reduce((acumulado, pizza) => {
-    return acumulado + pizza.price * pizza.count
-  }, 0)
 
   return (
     <div className={styles.contenedor}>
       <h3 className={styles.titulo}>Detalles del pedido:</h3>
 
-      {carrito.map((pizza) => (
+      {cart.map((pizza) => (
         <div key={pizza.id} className={styles.fila}>
-          <img
-            src={pizza.img}
-            alt={pizza.name}
-            className={styles.imagen}
-          />
+          <img src={pizza.img} alt={pizza.name} className={styles.imagen} />
 
           <span className={styles.nombre}>{pizza.name}</span>
 
           <span className={styles.precio}>
-            ${pizza.price.toLocaleString('es-CL')}
+            ${pizza.price.toLocaleString("es-CL")}
           </span>
 
           <div className={styles.controles}>
             <button
               className={styles.botonCantidad}
-              onClick={() => disminuir(pizza.id)}
+              onClick={() => removeFromCart(pizza.id)}
             >
               -
             </button>
-            <span className={styles.cantidad}>{pizza.count}</span>
+            <span className={styles.cantidad}>{pizza.quantity}</span> 
             <button
               className={styles.botonCantidad}
-              onClick={() => aumentar(pizza.id)}
+              onClick={() => addToCart(pizza)} 
             >
               +
             </button>
@@ -69,12 +46,10 @@ const Cart = () => {
       ))}
 
       <h4 className={styles.total}>
-        Total: ${total.toLocaleString('es-CL')}
+        Total: ${total.toLocaleString("es-CL")}
       </h4>
 
-      <button className={styles.botonPagar}>
-        Pagar
-      </button>
+      <button className={styles.botonPagar}>Pagar</button>
     </div>
   )
 }

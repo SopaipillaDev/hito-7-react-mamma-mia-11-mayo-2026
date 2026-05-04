@@ -1,11 +1,7 @@
 // src/App.jsx
 import { Routes, Route } from "react-router-dom"
-
-// Componentes globales (siempre visibles)
 import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
-
-// Páginas (desde /pages)
 import Home from "./pages/Home"
 import Register from "./pages/Register"
 import Login from "./pages/Login"
@@ -17,7 +13,7 @@ import NotFound from "./pages/NotFound"
 const App = () => {
   return (
     <div>
-      <Navbar totalPrecio={0} />
+      <Navbar />
 
       <Routes>
         <Route path="/"           element={<Home />} />

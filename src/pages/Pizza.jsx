@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react"
 import styles from "../assets/css/Pizza.module.css"
+import { useCart } from "../context/CartContext"
 
 const Pizza = () => {
   const [pizza, setPizza] = useState(null)
+  const { addToCart } = useCart()
 
   useEffect(() => {
     fetchPizza()
@@ -31,9 +33,12 @@ const Pizza = () => {
         <p className={styles.precio}>
           ${pizza.price.toLocaleString("es-CL")}
         </p>
-        <button className={styles.boton}>Añadir al carrito</button>
+		<button className={styles.boton} onClick={() => addToCart(pizza)}>
+			Añadir al carrito
+		</button>
       </div>
     </div>
+
   )
 }
 

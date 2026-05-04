@@ -1,3 +1,4 @@
+// src/pages/Home.jsx
 import { useState, useEffect } from "react"
 import CardPizza from "../components/CardPizza"
 import styles from "../assets/css/Home.module.css"
@@ -18,14 +19,10 @@ const Home = () => {
   return (
     <div className={styles.contenedor}>
       {pizzas.map((pizza) => (
-        <CardPizza
-          key={pizza.id}
-          nombre={pizza.name}
-          precio={pizza.price}
-          desc={pizza.desc}
-          img={pizza.img}
-          ingredientes={pizza.ingredients}
-        />
+		<CardPizza
+		  key={pizza.id}
+		  pizza={pizza}
+		/>
       ))}
     </div>
   )
