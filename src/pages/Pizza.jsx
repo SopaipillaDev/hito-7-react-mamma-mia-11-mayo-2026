@@ -1,45 +1,34 @@
-import { useState, useEffect } from "react"
-import styles from "../assets/css/Pizza.module.css"
-import { useCart } from "../context/CartContext"
+
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 
 const Pizza = () => {
-  const [pizza, setPizza] = useState(null)
-  const { addToCart } = useCart()
+  const { id } = useParams();
+
+  const [pizza, setPizza] = useState(null);
 
   useEffect(() => {
-    fetchPizza()
-  }, [])
+    fetch(`http://localhost:5000/api/pizzas/${id}`)
+      .then((res) => res.json())
+      .then((data) => setPizza(data));
+  }, [id]);
 
-  const fetchPizza = async () => {
-    const response = await fetch("http://localhost:5000/api/pizzas/p001")
-    const data = await response.json()
-    setPizza(data)
-  }
-
-  if (!pizza) return <p>Cargando...</p>
+  if (!pizza) return <p>Cargando pizza...</p>;
 
   return (
-    <div className={styles.contenedor}>
-      <img src={pizza.img} alt={pizza.name} className={styles.imagen} />
-      <div className={styles.contenido}>
-        <h2 className={styles.nombre}>{pizza.name}</h2>
-        <p className={styles.descripcion}>{pizza.desc}</p>
-        <p className={styles.tituloIngredientes}>Ingredientes:</p>
-        <ul className={styles.listaIngredientes}>
-          {pizza.ingredients.map((ingrediente) => (
-            <li key={ingrediente}>{ingrediente}</li>
-          ))}
-        </ul>
-        <p className={styles.precio}>
-          ${pizza.price.toLocaleString("es-CL")}
-        </p>
-		<button className={styles.boton} onClick={() => addToCart(pizza)}>
-			Añadir al carrito
-		</button>
-      </div>
+    <div>
+      <h1>{pizza.name}</h1>
+      <img src={pizza.img} alt={pizza.name} style={{ width: "300px" }} />
+      <p>{pizza.desc}</p>
+      <p>Precio: ${pizza.price.toLocaleString()}</p>
+      <h3>Ingredientes:</h3>
+      <ul>
+        {pizza.ingredients.map((ingrediente, index) => (
+          <li key={index}>{ingrediente}</li>
+        ))}
+      </ul>
     </div>
+  );
+};
 
-  )
-}
-
-export default Pizza
+export default Pizza;

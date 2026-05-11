@@ -1,35 +1,31 @@
-// src/components/CardPizza.jsx
-import { useCart } from "../context/CartContext"  // ← NUEVO
+import { useCart } from "../context/CartContext"
 import styles from "../assets/css/CardPizza.module.css"
+import { Link } from "react-router-dom";
 
-const CardPizza = ({ pizza }) => {  // ← recibe objeto completo
-  const { addToCart } = useCart()   // ← toma addToCart del contexto
+const CardPizza = ({ id, name, price, img, desc, ingredients }) => {
+  const { addToCart } = useCart()
 
   return (
     <div className={styles.tarjeta}>
-      <img src={pizza.img} alt={pizza.name} className={styles.imagen} />
-      <div className={styles.contenido}>
-        <h3 className={styles.nombre}>{pizza.name}</h3>
-        <p className={styles.descripcion}>{pizza.desc}</p>
-
-        <p className={styles.tituloIngredientes}>Ingredientes:</p>
-        <ul className={styles.listaIngredientes}>
-          {pizza.ingredients.map((ingrediente) => (
-            <li key={ingrediente}>{ingrediente}</li>
-          ))}
-        </ul>
-
-        <p className={styles.precio}>
-          ${pizza.price.toLocaleString("es-CL")}
-        </p>
-
-        <button
-          className={styles.boton}
-          onClick={() => addToCart(pizza)}
-        >
-          Añadir al carrito
-        </button>
-      </div>
+      <img src={img} alt={name} />
+      <h3>{name}</h3>
+      <p>{desc}</p>
+      <p className={styles.tituloIngredientes}>Ingredientes:</p>
+      <ul className={styles.listaIngredientes}>
+        {ingredients.map((ingrediente) => (
+          <li key={ingrediente}>{ingrediente}</li>
+        ))}
+      </ul>
+      <p className={styles.precio}>
+        ${price.toLocaleString("es-CL")}
+      </p>
+      <Link to={`/pizza/${id}`}>Ver detalle</Link>
+      <button
+        className={styles.boton}
+        onClick={() => addToCart({ id, name, price, img, desc, ingredients })}
+      >
+        Añadir al carrito
+      </button>
     </div>
   )
 }

@@ -21,7 +21,7 @@ const Home = () => {
       {pizzas.map((pizza) => (
 		<CardPizza
 		  key={pizza.id}
-		  pizza={pizza}
+		  {...pizza}
 		/>
       ))}
     </div>

@@ -1,57 +1,31 @@
-// src/pages/Cart.jsx
-import { useCart } from "../context/CartContext"  // ← NUEVO
-import styles from "../assets/css/Cart.module.css"
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
+import { useCart } from "../context/CartContext";
 
 const Cart = () => {
-  const { cart, total, addToCart, removeFromCart } = useCart()
-
-  if (cart.length === 0) {
-    return (
-      <div className={styles.contenedor}>
-        <h3 className={styles.titulo}>Tu carrito está vacío 🍕</h3>
-      </div>
-    )
-  }
+  const { token } = useContext(UserContext);
+  const { cart, total, removeFromCart } = useCart();
 
   return (
-    <div className={styles.contenedor}>
-      <h3 className={styles.titulo}>Detalles del pedido:</h3>
+    <div>
+      <h2>Tu carrito</h2>
 
-      {cart.map((pizza) => (
-        <div key={pizza.id} className={styles.fila}>
-          <img src={pizza.img} alt={pizza.name} className={styles.imagen} />
-
-          <span className={styles.nombre}>{pizza.name}</span>
-
-          <span className={styles.precio}>
-            ${pizza.price.toLocaleString("es-CL")}
-          </span>
-
-          <div className={styles.controles}>
-            <button
-              className={styles.botonCantidad}
-              onClick={() => removeFromCart(pizza.id)}
-            >
-              -
-            </button>
-            <span className={styles.cantidad}>{pizza.quantity}</span> 
-            <button
-              className={styles.botonCantidad}
-              onClick={() => addToCart(pizza)} 
-            >
-              +
-            </button>
-          </div>
+      {cart.map((item) => (
+        <div key={item.id}>
+          <p>
+            {item.name} × {item.quantity} — ${(item.price * item.quantity).toLocaleString("es-CL")}
+          </p>
+          <button onClick={() => removeFromCart(item.id)}>Quitar</button>
         </div>
       ))}
 
-      <h4 className={styles.total}>
-        Total: ${total.toLocaleString("es-CL")}
-      </h4>
+      <h3>Total: ${total.toLocaleString("es-CL")}</h3>
 
-      <button className={styles.botonPagar}>Pagar</button>
+      <button disabled={!token}>Pagar</button>
+
+      {!token && <p>Debes iniciar sesión para pagar.</p>}
     </div>
-  )
-}
+  );
+};
 
-export default Cart
+export default Cart;

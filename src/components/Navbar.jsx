@@ -1,9 +1,12 @@
-// src/components/Navbar.jsx
-import { Link } from "react-router-dom"
-import { useCart } from "../context/CartContext"  // ← NUEVO
+import { useContext } from "react";
+import { Link } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
+import { CartContext } from "../context/CartContext";
 
 const Navbar = () => {
-  const { total } = useCart()  // ← viene del contexto, no de props
+  const { token, logout } = useContext(UserContext);
+  const { cart } = useContext(CartContext);
+  const { total } = useContext(CartContext);
 
   return (
     <nav style={{
@@ -14,13 +17,20 @@ const Navbar = () => {
       gap: "20px",
       flexWrap: "wrap"
     }}>
-      <Link to="/" style={{ color: "white", textDecoration: "none", fontWeight: "bold", fontSize: "18px" }}>
-        🍕 Mamma Mía
-      </Link>
-      <Link to="/" style={{ color: "#ccc", textDecoration: "none" }}>Home</Link>
-      <Link to="/register" style={{ color: "#ccc", textDecoration: "none" }}>Registro</Link>
-      <Link to="/login" style={{ color: "#ccc", textDecoration: "none" }}>Login</Link>
-      <Link to="/profile" style={{ color: "#ccc", textDecoration: "none" }}>Perfil</Link>
+	
+	  <Link to="/">Home</Link>
+	  
+	  {token ? (
+        <>
+          <Link to="/profile">Profile</Link>
+          <button onClick={logout}>Logout</button>
+        </>
+      ) : (
+        <>
+          <Link to="/login">Login</Link>
+          <Link to="/register">Register</Link>
+        </>
+      )}
 
       <Link
         to="/cart"

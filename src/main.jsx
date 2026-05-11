@@ -1,17 +1,19 @@
-// src/main.jsx
-import React from "react"
-import ReactDOM from "react-dom/client"
-import { BrowserRouter } from "react-router-dom"
-import App from "./App.jsx"
-import CartProvider from "./context/CartContext.jsx"  // ← NUEVO
-import "./index.css"
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App.jsx";
+import CartProvider from "./context/CartContext.jsx";
+import UserProvider from "./context/UserContext.jsx"; 
+import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <CartProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </CartProvider>
+    <BrowserRouter>
+      <UserProvider>     
+        <CartProvider>
+          <App />
+        </CartProvider>
+      </UserProvider>
+    </BrowserRouter>
   </React.StrictMode>
-)
+);
